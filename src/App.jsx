@@ -12,7 +12,8 @@ function App() {
         setTodos([]);
     }, []);
 
-    // Effect hiển thị toast
+
+    // Effect hiển thị toast 
     useEffect(() => {
         if (toast.show) {
             // Tự động ẩn toast sau 3 giây
@@ -28,7 +29,8 @@ function App() {
     };
 
     // Function thêm công việc
-    const handleAddTodo = () => {
+    const handleAddTodo = (e) => {
+        e.preventDefault();
         // Kiểm tra nếu input rỗng thì không thêm công việc
         if (inputValue.trim() !== '') {
             // Tạo công việc mới
@@ -78,7 +80,8 @@ function App() {
     return (
         <div className='bg-slate-400 text-center h-screen w-screen'>
             <h1 className='py-6'>Todo List</h1>
-            <div className="gap-4 flex justify-center">
+
+            <form onSubmit={handleAddTodo} className="gap-4 flex justify-center">
                 <input type="text" value={inputValue} onChange={handleInputChange} id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-[400px]" placeholder="Nhập công việc" />
                 {editTodoId !== null ? (
                     <>
@@ -86,9 +89,10 @@ function App() {
                         <button onClick={handleCancelEdit} className="btn">Hủy</button>
                     </>
                 ) : (
-                    <button onClick={handleAddTodo} className="btn">Thêm mới</button>
+                    <button type='submit' className="btn">Thêm mới</button>
                 )}
-            </div>
+            </form>
+
             <div className='flex justify-center mt-7'>
                 <div className="relative overflow-x-auto">
                     <table className="w-[510px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
