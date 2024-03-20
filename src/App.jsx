@@ -7,16 +7,6 @@ function App() {
     const [editTodoId, setEditTodoId] = useState(null);
     const [toast, setToast] = useState(false);
 
-    useEffect(() => {
-        setTodos([]);
-    }, []);
-
-    useEffect(() => {
-        setTimeout(() => {
-            setToast(false);
-        }, 3000);
-    }, [todos, toast]);
-
     const handleInputChange = event => {
         setInputValue(event.target.value);
     };
@@ -56,6 +46,18 @@ function App() {
         const updatedTodos = todos.filter(todo => todo.id !== id);
         setTodos(updatedTodos);
     };
+
+
+    useEffect(() => {
+        setTodos([]);
+    }, []);
+
+    useEffect(() => {
+        setTimeout(() => {
+            setToast(false);
+        }, 3000);
+    }, [todos, toast]);
+
 
     return (
         <div className='bg-slate-400 text-center h-screen w-screen'>
