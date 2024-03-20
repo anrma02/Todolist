@@ -5,7 +5,19 @@ function App() {
     const [todos, setTodos] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [editTodoId, setEditTodoId] = useState(null);
-    const [toast, setToast] = useState(false);
+    const [toast, setToast] = useState({ show: false, message: '' });
+
+    useEffect(() => {
+        setTodos([]);
+    }, []);
+
+    useEffect(() => {
+        if (toast.show) {
+            setTimeout(() => {
+                setToast({ show: false, message: '' });
+            }, 3000);
+        }
+    }, [toast]);
 
     const handleInputChange = event => {
         setInputValue(event.target.value);
@@ -19,7 +31,7 @@ function App() {
             };
             setTodos([...todos, newTodo]);
             setInputValue('');
-            setToast(true);
+            setToast({ show: true, message: 'Thêm công việc thành công!!!' });
         }
     };
 
@@ -35,6 +47,7 @@ function App() {
         setTodos(updatedTodos);
         setEditTodoId(null);
         setInputValue('');
+        setToast({ show: true, message: 'Lưu công việc thành công!!!' });
     };
 
     const handleCancelEdit = () => {
@@ -45,19 +58,8 @@ function App() {
     const handleDeleteTodo = (id) => {
         const updatedTodos = todos.filter(todo => todo.id !== id);
         setTodos(updatedTodos);
+        setToast({ show: true, message: 'Xóa công việc thành công!!!' });
     };
-
-
-    useEffect(() => {
-        setTodos([]);
-    }, []);
-
-    useEffect(() => {
-        setTimeout(() => {
-            setToast(false);
-        }, 3000);
-    }, [todos, toast]);
-
 
     return (
         <div className='bg-slate-400 text-center h-screen w-screen'>
@@ -112,10 +114,10 @@ function App() {
                     </table>
                 </div>
             </div>
-            {toast && (
+            {toast.show && (
                 <div className="toast toast-top toast-end">
                     <div className="alert alert-success">
-                        <span className='text-[18px] font-semibold text-white'>Thêm công việc thành công!!!</span>
+                        <span className='text-[18px] font-semibold text-white'>{toast.message}</span>
                     </div>
                 </div>
             )}
