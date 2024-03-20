@@ -7,10 +7,12 @@ function App() {
     const [editTodoId, setEditTodoId] = useState(null);
     const [toast, setToast] = useState({ show: false, message: '' });
 
+    // Effect xóa dữ liệu khi load trang
     useEffect(() => {
         setTodos([]);
     }, []);
 
+    // Effect hiển thị toast
     useEffect(() => {
         if (toast.show) {
             setTimeout(() => {
@@ -19,10 +21,12 @@ function App() {
         }
     }, [toast]);
 
+    // Function nhập dữ liệu
     const handleInputChange = event => {
         setInputValue(event.target.value);
     };
 
+    // Function thêm công việc
     const handleAddTodo = () => {
         if (inputValue.trim() !== '') {
             const newTodo = {
@@ -35,12 +39,15 @@ function App() {
         }
     };
 
+    // Function sửa công việc
     const handleEditButtonClick = (id, text) => {
         setEditTodoId(id);
         setInputValue(text);
     };
 
+    // Function lưu công việc
     const handleSaveEdit = () => {
+        // Tìm công việc cần sửa và cập nhật nội dung mới
         const updatedTodos = todos.map(todo =>
             todo.id === editTodoId ? { ...todo, text: inputValue } : todo
         );
@@ -50,11 +57,13 @@ function App() {
         setToast({ show: true, message: 'Lưu công việc thành công!!!' });
     };
 
+    // Function hủy sửa công việc
     const handleCancelEdit = () => {
         setEditTodoId(null);
         setInputValue('');
     };
 
+    // Function xóa công việc
     const handleDeleteTodo = (id) => {
         const updatedTodos = todos.filter(todo => todo.id !== id);
         setTodos(updatedTodos);
