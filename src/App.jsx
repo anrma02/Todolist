@@ -15,6 +15,7 @@ function App() {
     // Effect hiển thị toast
     useEffect(() => {
         if (toast.show) {
+            // Tự động ẩn toast sau 3 giây
             setTimeout(() => {
                 setToast({ show: false, message: '' });
             }, 3000);
@@ -28,7 +29,9 @@ function App() {
 
     // Function thêm công việc
     const handleAddTodo = () => {
+        // Kiểm tra nếu input rỗng thì không thêm công việc
         if (inputValue.trim() !== '') {
+            // Tạo công việc mới
             const newTodo = {
                 id: todos.length + 1,
                 text: inputValue
@@ -49,6 +52,7 @@ function App() {
     const handleSaveEdit = () => {
         // Tìm công việc cần sửa và cập nhật nội dung mới
         const updatedTodos = todos.map(todo =>
+            // Nếu ID của công việc bằng với ID đang sửa thì cập nhật nội dung mới
             todo.id === editTodoId ? { ...todo, text: inputValue } : todo
         );
         setTodos(updatedTodos);
@@ -65,6 +69,7 @@ function App() {
 
     // Function xóa công việc
     const handleDeleteTodo = (id) => {
+        // Lọc ra các công việc có ID cần xóa
         const updatedTodos = todos.filter(todo => todo.id !== id);
         setTodos(updatedTodos);
         setToast({ show: true, message: 'Xóa công việc thành công!!!' });
