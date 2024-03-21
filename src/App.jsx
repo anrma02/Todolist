@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MdEdit, MdDeleteOutline } from "react-icons/md";
 
 function App() {
@@ -6,20 +6,28 @@ function App() {
     const [inputValue, setInputValue] = useState('');
     const [editTodoId, setEditTodoId] = useState(null);
     const [toast, setToast] = useState({ show: false, message: '' });
+    // Lưu trữ ID của setTimeout để clear sau khi component unmount
+    const toastTimeoutRef = useRef();
 
     // Effect xóa dữ liệu khi load trang
     useEffect(() => {
         setTodos([]);
     }, []);
 
-
     // Effect hiển thị toast 
     useEffect(() => {
         if (toast.show) {
             // Tự động ẩn toast sau 3 giây
-            setTimeout(() => {
+            toastTimeoutRef.current = setTimeout(() => {
                 setToast({ show: false, message: '' });
-            }, 3000);
+            }, 2000);
+        }
+        // Cleanup function được gọi khi component unmount hoặc trước khi effect chạy lại
+        return () => {
+            // Clear timeout để tránh rò rỉ bộ nhớ
+            if (toastTimeoutRef.current) {
+                clearTimeout(toastTimeoutRef.current);
+            }
         }
     }, [toast]);
 
