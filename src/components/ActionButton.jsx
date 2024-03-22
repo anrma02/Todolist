@@ -1,6 +1,18 @@
 import { MdEdit } from 'react-icons/md';
 import Button from '~/components/Button';
 
+
+/**
+ * Component ActionButton
+ * @param {string} action - Hành động
+ * @param {function} onClick - Function xử lý khi click
+ * @param {function} onCancel - Function hủy
+ * @param {function} handleEditButtonClick - Function sửa công việc
+ * @param {object} item - Công việc
+ * @returns {JSX.Element} - Element Button
+ *   
+  */
+
 // eslint-disable-next-line react/prop-types
 export const ActionButton = ({ action, onClick, onCancel, handleEditButtonClick, item }) => {
     switch (action) {
