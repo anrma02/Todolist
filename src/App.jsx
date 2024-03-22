@@ -1,26 +1,21 @@
 import { useState, useEffect, useRef } from 'react';
-import { MdEdit, MdDeleteOutline } from "react-icons/md";
+import { MdDeleteOutline } from "react-icons/md";
 
 import { addTodo, cancelEdit, deleteTodo, editTodo, inputChange, saveEdit } from './utils/todoHandle';
 import Button from './components/Button';
+import { ActionButton } from './components/ActionButton';
 
 function App() {
     const [todos, setTodos] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [editTodoId, setEditTodoId] = useState(null);
     const [toast, setToast] = useState({ show: false, message: '' });
-
-    console.log("🚀 ~ App ~ toast:", toast);
-
-
     const toastRef = useRef();
 
-    // Effect xóa dữ liệu khi load trang
     useEffect(() => {
         setTodos([]);
     }, []);
 
-    // Effect hiển thị toast 
     useEffect(() => {
         if (toast.show) {
             toastRef.current = setInterval(() => {
@@ -70,16 +65,13 @@ function App() {
             <h1 className='py-6'>Todo List</h1>
             <form onSubmit={handleAddTodo} className="gap-4 flex justify-center">
                 <input type="text" value={inputValue} onChange={handleInputChange} id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-[400px]" placeholder="Nhập công việc" />
-                {editTodoId !== null ? (
-                    <>
-                        <Button onClick={handleSaveEdit} className="btn">Lưu</Button>
-                        <Button onClick={handleCancelEdit} className="btn">Hủy</Button>
-                    </>
-                ) : (
-                    <Button type='submit' className="btn">Thêm mới</Button>
-                )}
-            </form>
+                <ActionButton
+                    action={editTodoId !== null ? 'edit' : 'add'}
+                    onClick={handleSaveEdit}
+                    onCancel={handleCancelEdit}
 
+                />
+            </form>
             <div className='flex justify-center mt-7'>
                 <div className="relative overflow-x-auto">
                     <table className="w-[510px] text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -106,11 +98,11 @@ function App() {
                                         {item.text}
                                     </td>
                                     <td className="flex justify-center gap-4 py-6 text-[16px]">
-                                        {editTodoId === item.id ? (
-                                            null
-                                        ) : (
-                                            <Button onClick={() => handleEditButtonClick(item.id, item.text)}> <MdEdit /></Button>
-                                        )}
+                                        <ActionButton
+                                            action="editItem"
+                                            item={item}
+                                            handleEditButtonClick={handleEditButtonClick}
+                                        />
                                         <Button onClick={() => handleDeleteTodo(item.id)}>
                                             <MdDeleteOutline />
                                         </Button>
