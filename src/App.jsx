@@ -31,6 +31,7 @@ function App() {
 
     useEffect(() => {
         if (isRunning) {
+            // Nếu đang chạy thì tăng thời gian lên 1 giây
             intervalRef.current = setInterval(() => {
                 setTime(prevTime => moment.duration(prevTime.asSeconds() + 1, 'seconds'));
             }, 1000);
@@ -40,10 +41,12 @@ function App() {
         };
     }, [isRunning]);
 
+    //  Function bắt đầu timer
     const handleStartTimer = () => {
         setIsRunning(true);
     };
 
+    // Function dừng timer
     const handleStopTimer = () => {
         setIsRunning(false);
         clearInterval(intervalRef.current);
