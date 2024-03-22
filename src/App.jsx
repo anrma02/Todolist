@@ -52,6 +52,13 @@ function App() {
         clearInterval(intervalRef.current);
     };
 
+    // Function reset timer
+    const handleResetTimer = () => {
+        setTime(moment.duration(0));
+        setIsRunning(false);
+        clearInterval(intervalRef.current);
+    }
+
     // Function nhập dữ liệu
     const handleInputChange = event => {
         inputChange(event, setInputValue);
@@ -89,7 +96,8 @@ function App() {
             <div className='my-4 '>
                 <div className='text-[18px] py-5 font-bold text-red-800'> {`${time.hours()} Hour : ${time.minutes()} Minute : ${time.seconds()} Second`}</div>
                 <Button onClick={handleStartTimer} className='btn' >Toggle</Button>  &nbsp; &nbsp;
-                <Button onClick={handleStopTimer} className='btn' >Stop</Button>
+                <Button onClick={handleStopTimer} className='btn' >Stop</Button>&nbsp; &nbsp;
+                <Button onClick={handleResetTimer} className='btn' >Reset</Button>
             </div>
             <form onSubmit={handleAddTodo} className="gap-4 flex justify-center">
                 <input type="text" value={inputValue} onChange={handleInputChange} id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-[400px]" placeholder="Nhập công việc" />
