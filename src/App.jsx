@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { MdEdit, MdDeleteOutline } from "react-icons/md";
 
+import { addTodo, cancelEdit, deleteTodo, editTodo, inputChange, saveEdit } from './utils/todoHandle';
+
 function App() {
     const [todos, setTodos] = useState([]);
     const [inputValue, setInputValue] = useState('');
@@ -33,62 +35,38 @@ function App() {
 
     // Function nhập dữ liệu
     const handleInputChange = event => {
-        setInputValue(event.target.value);
+        inputChange(event, setInputValue);
     };
 
     // Function thêm công việc
     const handleAddTodo = (e) => {
         e.preventDefault();
-        // Kiểm tra nếu input rỗng thì không thêm công việc
-        if (inputValue.trim() !== '') {
-            // Tạo công việc mới
-            const newTodo = {
-                id: todos.length + 1,
-                text: inputValue
-            };
-            setTodos([...todos, newTodo]);
-            setInputValue('');
-            setToast({ show: true, message: 'Thêm công việc thành công!!!' });
-        }
+        addTodo(e, inputValue, todos, setTodos, setInputValue, setToast);
     };
 
     // Function sửa công việc
     const handleEditButtonClick = (id, text) => {
-        setEditTodoId(id);
-        setInputValue(text);
+        editTodo(id, text, setEditTodoId, setInputValue)
     };
 
     // Function lưu công việc
     const handleSaveEdit = () => {
-        // Tìm công việc cần sửa và cập nhật nội dung mới
-        const updatedTodos = todos.map(todo =>
-            // Nếu ID của công việc bằng với ID đang sửa thì cập nhật nội dung mới
-            todo.id === editTodoId ? { ...todo, text: inputValue } : todo
-        );
-        setTodos(updatedTodos);
-        setEditTodoId(null);
-        setInputValue('');
-        setToast({ show: true, message: 'Lưu công việc thành công!!!' });
+        saveEdit(todos, setTodos, editTodoId, inputValue, setEditTodoId, setInputValue, setToast);
     };
 
     // Function hủy sửa công việc
     const handleCancelEdit = () => {
-        setEditTodoId(null);
-        setInputValue('');
+        cancelEdit(setEditTodoId, setInputValue);
     };
 
     // Function xóa công việc
     const handleDeleteTodo = (id) => {
-        // Lọc ra các công việc có ID cần xóa
-        const updatedTodos = todos.filter(todo => todo.id !== id);
-        setTodos(updatedTodos);
-        setToast({ show: true, message: 'Xóa công việc thành công!!!' });
+        deleteTodo(id, todos, setTodos, setToast);
     };
 
     return (
         <div className='bg-slate-400 text-center h-screen w-screen'>
             <h1 className='py-6'>Todo List</h1>
-
             <form onSubmit={handleAddTodo} className="gap-4 flex justify-center">
                 <input type="text" value={inputValue} onChange={handleInputChange} id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-[400px]" placeholder="Nhập công việc" />
                 {editTodoId !== null ? (
