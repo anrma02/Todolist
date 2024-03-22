@@ -6,8 +6,11 @@ function App() {
     const [inputValue, setInputValue] = useState('');
     const [editTodoId, setEditTodoId] = useState(null);
     const [toast, setToast] = useState({ show: false, message: '' });
-    // Lưu trữ ID của setTimeout để clear sau khi component unmount
-    const toastTimeoutRef = useRef();
+
+    console.log("🚀 ~ App ~ toast:", toast);
+
+
+    const toastRef = useRef();
 
     // Effect xóa dữ liệu khi load trang
     useEffect(() => {
@@ -17,16 +20,13 @@ function App() {
     // Effect hiển thị toast 
     useEffect(() => {
         if (toast.show) {
-            // Tự động ẩn toast sau 3 giây
-            toastTimeoutRef.current = setTimeout(() => {
+            toastRef.current = setInterval(() => {
                 setToast({ show: false, message: '' });
             }, 2000);
         }
-        // Cleanup function được gọi khi component unmount hoặc trước khi effect chạy lại
         return () => {
-            // Clear timeout để tránh rò rỉ bộ nhớ
-            if (toastTimeoutRef.current) {
-                clearTimeout(toastTimeoutRef.current);
+            if (toastRef.current) {
+                clearInterval(toastRef.current);
             }
         }
     }, [toast]);
