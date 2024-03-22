@@ -4,13 +4,17 @@ import { MdDeleteOutline } from "react-icons/md";
 import { addTodo, cancelEdit, deleteTodo, editTodo, inputChange, saveEdit } from './utils/todoHandle';
 import Button from './components/Button';
 import { ActionButton } from './components/ActionButton';
+import moment from 'moment';
 
 function App() {
     const [todos, setTodos] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [editTodoId, setEditTodoId] = useState(null);
     const [toast, setToast] = useState({ show: false, message: '' });
-    const toastRef = useRef();
+    const [time, setTime] = useState(moment.duration(0));
+    const [isRunning, setIsRunning] = useState(false);
+    const intervalRef = useRef(null);
+
 
     useEffect(() => {
         setTodos([]);
@@ -18,16 +22,32 @@ function App() {
 
     useEffect(() => {
         if (toast.show) {
-            toastRef.current = setInterval(() => {
+            setTimeout(() => {
                 setToast({ show: false, message: '' });
             }, 2000);
         }
-        return () => {
-            if (toastRef.current) {
-                clearInterval(toastRef.current);
-            }
-        }
     }, [toast]);
+
+
+    useEffect(() => {
+        if (isRunning) {
+            intervalRef.current = setInterval(() => {
+                setTime(prevTime => moment.duration(prevTime.asSeconds() + 1, 'seconds'));
+            }, 1000);
+        }
+        return () => {
+            clearInterval(intervalRef.current);
+        };
+    }, [isRunning]);
+
+    const handleStartTimer = () => {
+        setIsRunning(true);
+    };
+
+    const handleStopTimer = () => {
+        setIsRunning(false);
+        clearInterval(intervalRef.current);
+    };
 
     // Function nhập dữ liệu
     const handleInputChange = event => {
@@ -62,7 +82,12 @@ function App() {
 
     return (
         <div className='bg-slate-400 text-center h-screen w-screen'>
-            <h1 className='py-6'>Todo List</h1>
+            <h1 className='pt-6'>Todo List</h1>
+            <div className='my-4 '>
+                <div className='text-[18px] py-5 font-bold text-red-800'> {`${time.hours()} Hour : ${time.minutes()} Minute : ${time.seconds()} Second`}</div>
+                <Button onClick={handleStartTimer} className='btn' >Toggle</Button>  &nbsp; &nbsp;
+                <Button onClick={handleStopTimer} className='btn' >Stop</Button>
+            </div>
             <form onSubmit={handleAddTodo} className="gap-4 flex justify-center">
                 <input type="text" value={inputValue} onChange={handleInputChange} id="first_name" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 w-[400px]" placeholder="Nhập công việc" />
                 <ActionButton
